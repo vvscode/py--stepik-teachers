@@ -11,7 +11,12 @@
                 <div class="col-5"><img src="{{ teacher.picture }}" class="img-fluid" alt=""></div>
                 <div class="col-7">
                     <h1 class="h2">{{ teacher.name }}</h1>
-                    <p><span class="badge badge-secondary mr-2">Для путешествий </span>Рейтинг: {{ teacher.rating }} Ставка: {{ teacher.rate }} / час
+                    <p>
+                        {% for goal in teacher.goals %}
+                            <span class="badge badge-secondary mr-2">{{ goal|ru_goal }}</span>
+                        {% endfor %}
+
+                        Рейтинг: {{ teacher.rating }} Ставка: {{ teacher.price }} / час
                     </p>
                     <p>{{ teacher.about }}
                         <br> <br>
@@ -32,56 +37,23 @@
                     <th>Сб</th>
                     <th>Вс</th>
                 </tr>
-                <tr>
-                    <td><span class="btn">8:00</span></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">8:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">8:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">8:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">8:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">8:00</a></td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td><span class="btn">10:00</span></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">10:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">10:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">10:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">10:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">10:00</a></td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td><span class="btn">12:00</span></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">12:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">12:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">12:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">12:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">12:00</a></td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td><span class="btn">14:00</span></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">14:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">14:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">14:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">14:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">14:00</a></td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td><span class="btn">16:00</span></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">16:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">16:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">16:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-success">16:00</a></td>
-                    <td><a href="#" class="btn btn-sm btn-secondary">16:00</a></td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
+                {% for time in teacher.free.mon.keys() %}
+                    <tr>
+                    <td><span class="btn">{{ time }}</span></td>
+                    {% for day in teacher.free.keys() %}
+                        <td>
+                        {%  if teacher['free'][day][time] %}
+                            <a href="{{ url_for('booking', id=teacher.id, day=day, time=time) }}"
+                               class="btn btn-sm btn-success">
+                                {{ time }}
+                            </a>
+                        {% else %}
+                            <span class="btn btn-sm btn-secondary">{{ time }}</span>
+                        {% endif %}
+                        </td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
             </table>
         </div>
 </div>
